@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multiplication & Division Fact Triangle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #f4f8ff;
+      color: #123;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      max-width: 900px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px 24px 28px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin: 0 0 4px;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #456;
+      margin-bottom: 18px;
+    }
+
+    .layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Triangle area */
+    .triangle-card {
+      flex: 0 1 320px;
+      background: #f7fbff;
+      border-radius: 16px;
+      padding: 16px 12px 20px;
+      border: 1px solid #dde7ff;
+      position: relative;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .triangle-container {
+      position: relative;
+      width: 260px;
+      height: 220px;
+      margin: 0 auto;
+    }
+
+    .triangle-shape {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 130px solid transparent;
+      border-right: 130px solid transparent;
+      border-bottom: 210px solid #e3f1ff;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+    }
+
+    .vertex-input {
+      position: absolute;
+      width: 80px;
+      max-width: 32%;
+      text-align: center;
+      padding: 4px 6px;
+      border-radius: 999px;
+      border: 1px solid #b5c9ff;
+      background: #ffffffcc;
+      font-size: 0.9rem;
+      z-index: 1;
+    }
+
+    .vertex-input:focus {
+      outline: 2px solid #4a7dff;
+      outline-offset: 1px;
+    }
+
+    .vertex-top {
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .vertex-bottom-left {
+      bottom: 6px;
+      left: 12px;
+    }
+
+    .vertex-bottom-right {
+      bottom: 6px;
+      right: 12px;
+    }
+
+    .vertex-label {
+      position: absolute;
+      font-size: 0.75rem;
+      color: #345;
+      background: #f7fbffdd;
+      padding: 2px 6px;
+      border-radius: 999px;
+      z-index: 1;
+    }
+
+    .label-top {
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .label-bottom-left {
+      bottom: 46px;
+      left: 30px;
+    }
+
+    .label-bottom-right {
+      bottom: 46px;
+      right: 30px;
+    }
+
+    /* Fact family area */
+    .facts-card {
+      flex: 1 1 320px;
+      background: #f7fbff;
+      border-radius: 16px;
+      padding: 16px 16px 20px;
+      border: 1px solid #dde7ff;
+    }
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: auto;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .fact-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.95rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .fact-input {
+      width: 70px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid #b5c9ff;
+      background: #ffffff;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .fact-input:focus {
+      outline: 2px solid #4a7dff;
+      outline-offset: 1px;
+    }
+
+    .symbol {
+      min-width: 14px;
+      text-align: center;
+    }
+
+    .controls {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #456;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #4a7dff;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 2px 6px rgba(74, 125, 255, 0.3);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(74, 125, 255, 0.35);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 4px rgba(74, 125, 255, 0.25);
+    }
+
+    @media (max-width: 720px) {
+      .triangle-container {
+        transform: scale(0.9);
+        transform-origin: top center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Fact Triangle: Multiplication & Division</h1>
+    <div class="subtitle">
+      Type into <strong>any two</strong> spaces (triangle or fact family).  
+      The missing value will fill in automatically.
+    </div>
+
+    <div class="layout">
+      <!-- Triangle card -->
+      <div class="triangle-card">
+        <div class="card-title">Fact Triangle</div>
+        <div class="triangle-container">
+          <div class="triangle-shape"></div>
+
+          <!-- Inputs at the vertices -->
+          <input
+            id="productVertex"
+            type="number"
+            step="any"
+            class="vertex-input vertex-top"
+            data-role="p"
+            placeholder="product"
+          />
+          <span class="vertex-label label-top">Product (z)</span>
+
+          <input
+            id="factorAVertex"
+            type="number"
+            step="any"
+            class="vertex-input vertex-bottom-left"
+            data-role="a"
+            placeholder="factor"
+          />
+          <span class="vertex-label label-bottom-left">Factor (x)</span>
+
+          <input
+            id="factorBVertex"
+            type="number"
+            step="any"
+            class="vertex-input vertex-bottom-right"
+            data-role="b"
+            placeholder="factor"
+          />
+          <span class="vertex-label label-bottom-right">Factor (y)</span>
+        </div>
+      </div>
+
+      <!-- Facts card -->
+      <div class="facts-card">
+        <div class="card-title">Fact Family</div>
+        <div class="facts-grid">
+          <!-- Row 1: x * y = z -->
+          <div class="fact-row">
+            <input
+              id="aMul1"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="a"
+            />
+            <span class="symbol">×</span>
+            <input
+              id="bMul1"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="b"
+            />
+            <span class="symbol">=</span>
+            <input
+              id="pMul1"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="p"
+            />
+          </div>
+
+          <!-- Row 2: y * x = z (mirrors the same values) -->
+          <div class="fact-row">
+            <input
+              id="bMul2"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="b"
+            />
+            <span class="symbol">×</span>
+            <input
+              id="aMul2"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="a"
+            />
+            <span class="symbol">=</span>
+            <input
+              id="pMul2"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="p"
+            />
+          </div>
+
+          <!-- Row 3: z / y = x -->
+          <div class="fact-row">
+            <input
+              id="pDiv1"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="p"
+            />
+            <span class="symbol">÷</span>
+            <input
+              id="bDiv1"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="b"
+            />
+            <span class="symbol">=</span>
+            <input
+              id="aDiv1"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="a"
+            />
+          </div>
+
+          <!-- Row 4: z / x = y -->
+          <div class="fact-row">
+            <input
+              id="pDiv2"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="p"
+            />
+            <span class="symbol">÷</span>
+            <input
+              id="aDiv2"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="a"
+            />
+            <span class="symbol">=</span>
+            <input
+              id="bDiv2"
+              type="number"
+              step="any"
+              class="fact-input"
+              data-role="b"
+            />
+          </div>
+        </div>
+
+        <div class="controls">
+          <span>
+            <strong>Tip:</strong> Enter any two of x, y, z.  
+            The tool calculates the missing value.
+          </span>
+          <button class="btn" id="clearBtn">Clear all</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Shared "conceptual" values for the fact family
+    const state = {
+      a: "", // factor x
+      b: "", // factor y
+      p: ""  // product z
+    };
+
+    // All inputs that participate in the fact family
+    const allInputs = Array.from(
+      document.querySelectorAll('input[data-role]')
+    );
+
+    function parseNum(value) {
+      const n = parseFloat(value);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function updateFromInput(event) {
+      const input = event.target;
+      const role = input.dataset.role; // 'a', 'b', or 'p'
+      const raw = input.value.trim();
+
+      // Update the state with the latest value the user typed
+      state[role] = raw;
+
+      // Try to compute the missing value, if possible
+      computeMissing(role);
+
+      // Reflect the canonical state back into all fields
+      render();
+    }
+
+    function computeMissing(lastChangedRole) {
+      // Convert current state to numbers (or null if invalid/empty)
+      const aNum = parseNum(state.a);
+      const bNum = parseNum(state.b);
+      const pNum = parseNum(state.p);
+
+      // Helper flags: do we "have" each value as a usable number?
+      const hasA = aNum !== null;
+      const hasB = bNum !== null;
+      const hasP = pNum !== null;
+
+      // If at least two values are known, compute the third
+      // Priority is based on what the user last changed, to keep it intuitive.
+      if (!hasP && hasA && hasB) {
+        // We know both factors, compute product
+        state.p = (aNum * bNum).toString();
+      } else if (!hasA && hasB && hasP && bNum !== 0) {
+        // We know y and z, compute x
+        state.a = (pNum / bNum).toString();
+      } else if (!hasB && hasA && hasP && aNum !== 0) {
+        // We know x and z, compute y
+        state.b = (pNum / aNum).toString();
+      } else if (lastChangedRole === "p") {
+        // Product changed but both factors are present. Adjust one factor to match.
+        // We will keep 'a' and recompute 'b' if possible.
+        if (hasA && !hasB && hasP && aNum !== 0) {
+          state.b = (pNum / aNum).toString();
+        } else if (hasB && !hasA && hasP && bNum !== 0) {
+          state.a = (pNum / bNum).toString();
+        } else if (hasA && hasP && aNum !== 0) {
+          state.b = (pNum / aNum).toString();
+        } else if (hasB && hasP && bNum !== 0) {
+          state.a = (pNum / bNum).toString();
+        }
+      }
+    }
+
+    function render() {
+      // Write the canonical state.a, state.b, state.p into every input
+      allInputs.forEach((el) => {
+        const role = el.dataset.role;
+        el.value = state[role];
+      });
+    }
+
+    function clearAll() {
+      state.a = "";
+      state.b = "";
+      state.p = "";
+      render();
+    }
+
+    // Attach listeners
+    allInputs.forEach((input) => {
+      input.addEventListener("input", updateFromInput);
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", clearAll);
+  </script>
+</body>
+</html>
